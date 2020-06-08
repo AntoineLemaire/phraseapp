@@ -45,4 +45,49 @@ class Locale extends HttpApi
 
         return (string) $response->getBody();
     }
+
+    /**
+     * @param string $projectKey
+     * @param string $localeId
+     * @param array $params
+     *
+     * @throws Exception\DomainException
+     *
+     * @return ResponseInterface|string
+     */
+    public function delete(string $projectKey, string $localeId, array $params = [])
+    {
+        $response = $this->httpDelete(sprintf('/api/v2/projects/%s/locales/%s', $projectKey, $localeId), $params);
+
+        if (!$this->hydrator) {
+            return $response;
+        }
+
+        if ($response->getStatusCode() !== 200) {
+            $this->handleErrors($response);
+        }
+
+        return (string) $response->getBody();
+    }
+
+    /**
+     * @param string $projectKey
+     * @param array $params
+     * @return ResponseInterface|string
+     * @throws Exception\DomainException
+     */
+    public function list(string $projectKey, array $params = [])
+    {
+        $response = $this->httpGet(sprintf('/api/v2/projects/%s/locales', $projectKey), $params);
+
+        if (!$this->hydrator) {
+            return $response;
+        }
+
+        if ($response->getStatusCode() !== 200) {
+            $this->handleErrors($response);
+        }
+
+        return (string) $response->getBody();
+    }
 }
